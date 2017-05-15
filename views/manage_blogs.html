@@ -1,0 +1,117 @@
+{% extends '__base__.html' %} {% block title %}编辑日志{% endblock %} 
+
+{% block beforehead %}
+<script src="/static/js/vue2.js"></script>
+<script src="/static/js/vue-nav.js"></script>
+<script src="/static/js/vue-resource.min.js"></script>
+
+<script>
+    function showError(resp) {
+        resp.json().then(function (result) {
+            console.log('Error: ' + result.message);
+        });
+    }
+   $(function(){
+        var count = '{{pageCount}}';
+        var countInt = parseInt(count);
+        var vm = new Vue({
+            el: '#vm',
+            data: {
+                blogs:'',
+                currentPage:1,
+                pageSize:10,
+                pageCount:countInt
+            },
+            created(){
+                this.init();
+                $("#loading").hide();
+            },
+            components:{
+                'vue-nav': Vnav
+            },
+            methods: {
+                init: function () {
+                    var that = this;
+                    that.$resource('/api/blogs?pageSize='+that.pageSize+'&currentPage='+that.currentPage).get().then(function (resp) {
+                            resp.json().then(function (result) {
+                                that.blogs = result;
+                                console.log(that.blogs);
+                            });
+                        }, showError);
+                },
+                editBlog:function(blog){
+                    location.assign('/manage/blogs/edit?id=' + blog.id);
+                },
+                deleteBlog: function (blog) {
+                    var that = this;
+                    if (confirm('确认要删除' + blog.name + '？删除后不可恢复！')) {
+                        that.$resource('/api/blogs/'+blog.id+'/delete').delete().then(function (resp) {
+                            resp.json().then(function (result) {
+                                that.init();
+                            });
+                        }, showError);
+                    }
+                },
+                callback(page){
+                    this.currentPage = page;
+                    this.init();
+                }
+            }
+        });
+        $("#vm").show();
+})
+</script>
+
+{%  endblock %}
+{% block content %}
+
+    <div class="uk-width-1-1 uk-margin-bottom">
+        <div class="uk-panel uk-panel-box">
+            <ul class="uk-breadcrumb">
+                <li class="uk-active"><span>博客</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="error" class="uk-width-1-1">
+    </div>
+
+    <div id="loading" class="uk-width-1-1 uk-text-center">
+        <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> 正在加载...</span>
+    </div>
+
+    <div id="vm" class="uk-width-1-1">
+        <a href="/manage/blogs/create" class="uk-button uk-button-primary"><i class="uk-icon-plus"></i> 新日志</a>
+
+        <table class="uk-table uk-table-hover">
+            <thead>
+                <tr>
+                    <th class="uk-width-5-10">标题 / 摘要</th>
+                    <th class="uk-width-2-10">作者</th>
+                    <th class="uk-width-2-10">创建时间</th>
+                    <th class="uk-width-1-10">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="blog in blogs" >
+                    <td>
+                        <a target="_blank" v-bind:href="'/blog/'+blog.id" v-text="blog.name"></a>
+                    </td>
+                    <td>
+                        <a href="#0">北岛</a>
+                    </td>
+                    <td>
+                        <span v-text="blog.createdAt.toDateTimeString()"></span>
+                    </td>
+                    <td>
+                        <a href="#0" v-on:click="editBlog(blog)"><i class="uk-icon-edit"></i></a> 
+                        <a href="#0" v-on:click="deleteBlog(blog)"><i class="uk-icon-trash-o"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <vue-nav :cur="currentPage" :all="pageCount" :callback="callback"></vue-nav>
+
+    </div>
+
+{% endblock %}

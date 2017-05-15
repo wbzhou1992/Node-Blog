@@ -1,0 +1,32 @@
+{% extends '__base__.html' %}
+
+{% block title %}{{ blog.name }}{% endblock %}
+
+{% block beforehead %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="uk-width-medium-3-4">
+        <article class="uk-article">
+            <h2>{{ blog.name }}</h2>
+            <p class="uk-article-meta">发表于{{ blog.createdAt | date_filter }}</p>
+            <pre>{{ blog.content }}</pre>
+        </article>
+
+        <hr class="uk-article-divider">
+
+    </div>
+    <div class="uk-width-medium-1-4">
+
+        <div class="uk-panel uk-panel-header">
+            <h3 class="uk-panel-title">友情链接</h3>
+            <ul class="uk-list uk-list-line">
+                <li><i class="uk-icon-link"></i> <a href="#">编程</a></li>
+                <li><i class="uk-icon-link"></i> <a href="#">思考</a></li>
+                <li><i class="uk-icon-link"></i> <a href="#">读书</a></li>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

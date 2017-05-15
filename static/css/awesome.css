@@ -1,0 +1,52 @@
+/*
+ * custom css
+ */
+a:hover, a:active {
+    text-decoration: none;
+}
+
+#vm {
+    display: none;
+}
+#loading {
+    margin-bottom: 15px;
+}
+#error {
+    display: none;
+    margin-bottom: 15px;
+}
+
+.uk-pagination span {
+  border: 1px solid #ddd;
+  text-decoration: none;
+  color: #337ab7;
+  cursor: pointer
+}
+/*.uk-pagination li {
+  list-style: none;
+  display: inline-block;
+}
+
+.uk-pagination li:first-child>a {
+  margin-left: 0px
+}
+
+
+
+.puk-pagination a:hover {
+  background-color: #eee;
+}
+
+.uk-pagination .active a {
+  color: #000;
+  cursor: default;
+  background-color: #337ab7;
+  border-color: #337ab7;
+}
+
+.uk-pagination i {
+  font-style:normal;
+  color: #d44950;
+  margin: 0px 4px;
+  font-size: 12px;
+}*/
