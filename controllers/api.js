@@ -1,42 +1,29 @@
-//const products= require('../products');
 const model = require('../model');
 const APIError = require('../rest').APIError;
-let User = model.User,
-    Blog = model.Blog,
-    Comment = model.Comment;
-// function parseQueryString(string){
-//     var stringArr = string.split('&');
-//     var stringObj = {};
-//     for(var string of stringArr){
-//         var i 
-//     }
-    
-// }
+let Blog = model.Blog;
 module.exports = {
 
     'GET /api/blogs': async (ctx, next) => {
-        var pageSize = parseInt(ctx.request.query.pageSize);
-        var currentPage = parseInt(ctx.request.query.currentPage);
-        var pageCount;
-        console.log(currentPage);
-        var blogsTotal = await Blog.findAll({
+        var pageCount,
+            blogsTotal,
+            blogsCount,
+            queryString = ctx.request.query,
+            pageSize = parseInt(queryString.pageSize),
+            currentPage = parseInt(queryString.currentPage);
+        blogsTotal = await Blog.findAll({
             order: 'createdAt DESC'
         });
-        console.log(blogsTotal.length)
-        if(blogsTotal.length>pageSize){
-            pageCount = Math.ceil(blogsTotal.length/pageSize);
+        blogsCount=blogsTotal.length;
+        if(blogsCount>pageSize){
+            pageCount = Math.ceil(blogsCount/pageSize);
         }else{
             pageCount = 1;
         }
-        console.log(pageCount);
         var blogs = await Blog.findAll({
             order: 'createdAt DESC',
             offset:(currentPage-1)*pageSize,
             limit:pageSize
         });
-        for (let b of blogs) {
-            console.log(`find ${b.name}`);
-        }
         ctx.rest(blogs);
     },
     'GET /api/blogs/:id': async (ctx, next) => {
@@ -50,10 +37,12 @@ module.exports = {
         }
     },
     'PUT /api/blogs/:id': async (ctx, next) => {
-        var name = ctx.request.body.name;
-        var summary = ctx.request.body.summary;
-        var content = ctx.request.body.content;
-        var blog = await Blog.findAll({
+        var blog,
+            requestBody = ctx.request.body,
+            name = requestBody.name,
+            summary = requestBody.summary,
+            content = requestBody.content;
+            blog = await Blog.findAll({
             where: {
                 id: ctx.params.id
             }
@@ -63,7 +52,6 @@ module.exports = {
             b.summary = summary;
             b.content = content;
             await b.save();
-            console.log(`find the ${b.name}`);
             ctx.rest(b);
         }
     },
@@ -97,7 +85,6 @@ module.exports = {
         });
         for(var b of blog){
             await b.destroy({ force: true });
-            console.log(`Delete the ${b.name}`);
             ctx.rest(b);
         }
 

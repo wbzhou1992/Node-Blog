@@ -1,4 +1,4 @@
-{% extends '__base__.html' %} {% block title %}编辑日志{% endblock %}
+{% extends '__base__.html' %} {% block title %}编辑博客{% endblock %}
 
 
 
@@ -8,6 +8,7 @@
     $(function () {
         var ID = '{{id}}',
         action = '/api/blogs/' + ID;
+        console.log(ID);
     function showError(resp) {
         resp.json().then(function (result) {
             console.log('Error: ' + result.message);
@@ -15,7 +16,11 @@
     }
         var vm = new Vue({
             el: '#vm',
-            data: {},
+            data: {
+                name:'',
+                summary:'',
+                content:''
+            },
             created: function () {
                 if(ID){
                    this.init();
@@ -27,7 +32,9 @@
                     var that = this;
                     that.$resource('/api/blogs/' + ID).get().then(function (resp) {
                         resp.json().then(function (result) {
-                            that.$data = result;
+                            that.name = result.name;
+                            that.content= result.content;
+                            that.summary = result.summary;
                             console.log(result);
                         });
                     }, showError);
