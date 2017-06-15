@@ -3,27 +3,7 @@
 {% block title %}博客{% endblock %}
 
 {% block beforehead %}
-<script>
-(function(){
-    var vm= new Vue({
-        el:"#vm",
-        components:{
-            'vue-nav':Vnav
-        },
-        data:{
-            cur:1,
-            allPages:0,
-            msg:''
-        },
 
-        methods:{
-            callback:function(data){
-                this.cur=data;
-            }
-        }
-    })
-})
-</script>
 
 {% endblock %}
 
