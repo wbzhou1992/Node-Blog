@@ -33,7 +33,8 @@
 - [ ] 用户登录
 - [ ] 用户评论
 
-[![首页](index.png)
-[![编辑](edit.png)
-[![管理](manage.png)
-[![博客](blog.png)
+展示
+![首页](index.png)
+![编辑](edit.png)
+![管理](manage.png)
+![博客](blog.png)
