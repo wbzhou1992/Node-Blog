@@ -34,15 +34,7 @@
 - [ ] 用户评论
 
 展示
-
-首页
-<img src="index.png">
-
-编辑
-<img src="edit.png">
-
-管理
-<img src="manage.png">
-
-博客
-<img src="blog.png">
+![首页](index.png)
+![编辑](edit.png)
+![管理](manage.png)
+![博客](blog.png)
