@@ -36,7 +36,7 @@
 展示
 
 首页
-<img src="index.png" style="width:600px;height:600px;box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);"">
+<img src="index.png" style="width:600px;height:600px;box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 编辑
 <img src="edit.png" style="width:600px;height:600px;box-shadow:0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
 管理
