@@ -22,7 +22,6 @@ var navBar = Vue.extend({
       callback: {
         default() {
           return function callback() {
-            
           }
         }
       }
