@@ -37,13 +37,13 @@
 
 * 首页
 
-![首页](READMEIMAGES/index.png)
+![首页](READMEIMAGES/index.PNG)
 * 编辑
 
-![编辑](READMEIMAGES/edit.png)
+![编辑](READMEIMAGES/edit.PNG)
 * 管理
 
-![管理](READMEIMAGES/manage.png)
+![管理](READMEIMAGES/manage.PNG)
 * 博客
 
-![博客](READMEIMAGES/blog.png)
+![博客](READMEIMAGES/blog.PNG)
