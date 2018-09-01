@@ -33,17 +33,4 @@
 - [x] 用户注册登录
 - [ ] 用户评论
 
-展示
 
-* 首页
-
-![首页](READMEIMAGES/index.PNG)
-* 编辑
-
-![编辑](READMEIMAGES/edit.PNG)
-* 管理
-
-![管理](READMEIMAGES/manage.PNG)
-* 博客
-
-![博客](READMEIMAGES/blog.PNG)
