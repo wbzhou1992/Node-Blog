@@ -1,0 +1,87 @@
+{% extends '__base__.html' %} {% block title %}注册{% endblock %} {% block beforehead %}
+
+<script>
+
+        function validateEmail(email) {
+            var re = /^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$/;
+            return re.test(email.toLowerCase());
+        }
+        function showError(resp) {
+            resp.json().then(function (result) {
+                console.log('Error: ' + result.message);
+            });
+        }
+        $(document).ready(function(){
+ var vm = new Vue({
+                el: '#vm',
+                data: {
+                    name: '',
+                    email: '',
+                    password1: '',
+                    password2: ''
+                },
+                methods: {
+                    saveUser:function(){
+                        var that = this;
+                        var email = that.email.trim().toLowerCase();
+                        var user = {
+                            name:that.name.trim(),
+                            email:that.email.trim(),
+                            passwd:that.password1.trim(),
+                        }
+                        that.$resource('/api/users').save(user).then(function (resp) {
+                            resp.json().then(function (result) {
+                                console.log("result",result);
+                                location.assign('/')
+                            });
+                        }, showError);
+                    },
+                    register: function (event) {
+                        event.preventDefault();
+                        var that = this;
+                        that.saveUser();
+
+                    }
+                }
+            });
+        })
+           
+        
+</script> {% endblock %} {% block content %}
+
+<div class="uk-width-2-3">
+    <h1>欢迎注册！</h1>
+    <form id="vm" v-on:submit="register" class="uk-form uk-form-stacked">
+        <div class="uk-alert uk-alert-danger uk-hidden"></div>
+        <div class="uk-form-row">
+            <label class="uk-form-label">名字:</label>
+            <div class="uk-form-controls">
+                <input v-model="name" type="text" maxlength="50" placeholder="名字" class="uk-width-1-1">
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <label class="uk-form-label">电子邮件:</label>
+            <div class="uk-form-controls">
+                <input v-model="email" type="text" maxlength="50" placeholder="your-name@example.com" class="uk-width-1-1">
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <label class="uk-form-label">输入口令:</label>
+            <div class="uk-form-controls">
+                <input v-model="password1" type="password" maxlength="50" placeholder="输入口令" class="uk-width-1-1">
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <label class="uk-form-label">重复口令:</label>
+            <div class="uk-form-controls">
+                <input v-model="password2" type="password" maxlength="50" placeholder="重复口令" class="uk-width-1-1">
+            </div>
+        </div>
+        <div class="uk-form-row">
+            <button type="submit" class="uk-button uk-button-primary">
+                <i class="uk-icon-user"></i> 注册</button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

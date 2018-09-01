@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="/static/css/uikit.min.css">
     <link rel="stylesheet" href="/static/css/uikit.gradient.min.css">
     <link rel="stylesheet" href="/static/css/awesome.css" />
-    <script src="/static/js/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+        <script src="/static/js/jquery.min.js"></script>
     <script src="/static/js/uikit.min.js"></script>
     <script src="/static/js/blogs.js"></script>
     <script src="/static/js/vue2.js"></script>
@@ -25,6 +26,19 @@
                 <li><a href="/manage/blogs">管理</a></li>
                 <li><a target="_blank" href="https://github.com/wbzhou1992/Node-Blog"><i class="uk-icon-code"></i>源码</a></li>
             </ul>
+            <div class="uk-navbar-flip">
+                <ul class="uk-navbar-nav">
+                {% if user %}
+                    <li>
+                        <a href="#0"><i class="uk-icon-user"></i> {{ user.name }}</a>
+                    </li>
+                    <li><a href="/signout"><i class="uk-icon-sign-out"></i> 登出</a></li>
+                {% else %}
+                    <li><a href="/signin"><i class="uk-icon-sign-in"></i> 登陆</a></li>
+                    <li><a href="/register"><i class="uk-icon-edit"></i> 注册</a></li>
+                {% endif %}
+                </ul>
+            </div>
         </div>
     </nav>
 

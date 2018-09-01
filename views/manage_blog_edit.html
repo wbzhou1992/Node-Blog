@@ -1,82 +1,74 @@
-{% extends '__base__.html' %} {% block title %}编辑博客{% endblock %}
-
-
-
-{% block beforehead %}
+{% extends '__base__.html' %} {% block title %}编辑博客{% endblock %} {% block beforehead %}
 
 <script>
-(function () {
-    var ID = location.search.substring(4),
-    action = '/api/blogs/' + ID;
-    console.log(ID);
-    function showError(resp) {
-        resp.json().then(function (result) {
-            console.log('Error: ' + result.message);
-        });
-    }
-    window.onload = function(){
-        var vm = new Vue({
-            el: '#vm',
-            data: {
-                blog:{
-                    name:'',
-                    summary:'',
-                    content:''
+    (function () {
+        var ID = location.search.substring(4),
+            action = '/api/blogs/' + ID;
+        console.log(ID);
+        function showError(resp) {
+            resp.json().then(function (result) {
+                console.log('Error: ' + result.message);
+            });
+        }
+        window.onload = function () {
+            var vm = new Vue({
+                el: '#vm',
+                data: {
+                    blog: {
+                        name: '',
+                        summary: '',
+                        content: ''
+                    },
+                    loading: true
                 },
-                loading:true
-            },
-            created: function () {
-                if(ID){
-                   this.init();
-                }
-                this.loading = false;
-            },
-            methods: {
-                init: function () {
-                    var that = this;
-                    that.$resource('/api/blogs/' + ID).get().then(function (resp) {
-                        resp.json().then(function (result) {
-                            that.blog.name = result.name;
-                            that.blog.content= result.content;
-                            that.blog.summary = result.summary;
-                            console.log(result);
-                        });
-                    }, showError);
+                created: function () {
+                    if (ID) {
+                        this.init();
+                    }
+                    this.loading = false;
                 },
-                createBlog:function(){
-                    var that = this;
-                    that.$resource('/api/blogs').save(that.blog).then(function(resp){
-                        resp.json().then(function (result) {
-                            console.log(resp);
+                methods: {
+                    init: function () {
+                        var that = this;
+                        that.$resource('/api/blogs/' + ID).get().then(function (resp) {
+                            resp.json().then(function (result) {
+                                that.blog.name = result.name;
+                                that.blog.content = result.content;
+                                that.blog.summary = result.summary;
+                                console.log(result);
                             });
-                    },showError);
-                },
-                updateBlog:function(){
-                    var that = this;
-                    that.$resource(action).update(that.blog).then(function(resp){
-                        console.log(`Update ${resp}`);
-                    },showError);
-                },
-                saveBlog:function(){
-                    var that = this;
-                    ID ? that.updateBlog() : that.createBlog();
-                },
-                submit:function(event){ 
-                    event.preventDefault();             
-                    var that = this;
-                    that.saveBlog();
-                    location.assign('/manage/blogs');
-                    console.log(that.name);
-                    console.log(that.summary);
-                    console.log(that.content);
+                        }, showError);
+                    },
+                    createBlog: function () {
+                        var that = this;
+                        that.$resource('/api/blogs').save(that.blog).then(function (resp) {
+                            resp.json().then(function (result) {
+                                console.log(resp);
+                            });
+                        }, showError);
+                    },
+                    updateBlog: function () {
+                        var that = this;
+                        that.$resource(action).update(that.blog).then(function (resp) {
+                            console.log(`Update ${resp}`);
+                        }, showError);
+                    },
+                    saveBlog: function () {
+                        var that = this;
+                        ID ? that.updateBlog() : that.createBlog();
+                    },
+                    submit: function (event) {
+                        event.preventDefault();
+                        var that = this;
+                        that.saveBlog();
+                        return location.assign('/manage/blogs');
+                       
+                    }
                 }
-            }
-        });
-    }
-})()
-</script>
-
-{% endblock %} {% block content %}
+            });
+        }
+    })()
+</script> {% endblock %} {% block content %}
 
 <div class="uk-width-1-1 uk-margin-bottom">
     <div class="uk-panel uk-panel-box">
@@ -85,7 +77,8 @@
 </div>
 <div id="vm" class="uk-width-2-3">
     <div v-if="loading" class="uk-width-1-1 uk-text-center">
-        <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> 正在加载...</span>
+        <span>
+            <i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> 正在加载...</span>
     </div>
     <form v-on:submit="submit" class="uk-form uk-form-stacked">
         <div class="uk-alert uk-alert-danger uk-hidden"></div>
@@ -108,8 +101,10 @@
             </div>
         </div>
         <div class="uk-form-row">
-            <button type="submit" class="uk-button uk-button-primary"><i class="uk-icon-save"></i> 保存</button>
-            <a href="/manage/blogs" class="uk-button"><i class="uk-icon-times"></i> 取消</a>
+            <button type="submit" class="uk-button uk-button-primary">
+                <i class="uk-icon-save"></i> 保存</button>
+            <a href="/manage/blogs" class="uk-button">
+                <i class="uk-icon-times"></i> 取消</a>
         </div>
     </form>
 </div>

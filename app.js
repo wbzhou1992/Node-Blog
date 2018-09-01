@@ -3,7 +3,7 @@ const bodyParser = require('koa-bodyparser');
 const controller = require('./controller');
 const templating = require('./templating');
 const rest = require('./rest');
-
+const setcookie = require('./cookie')
 
 const app = new Koa();
 app.use(async (ctx, next) => {
@@ -17,6 +17,7 @@ app.use(templating('views', {
     noCache: true,
     watch: true
 }));
+//app.use(setcookie.setcookie());
 app.use(rest.restify());
 
 app.use(controller());

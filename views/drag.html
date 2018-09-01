@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>
+        // function drag(ev){
+        //     ev.dataTransfer.setData('Text',ev.target.id)
+        // }
+        // function dragover(ev){
+        //     ev.preventDefault();
+        // }
+        // function drop(ev){
+        //     ev.preventDefault();
+        //     var data = ev.dataTransfer.getData('Text');
+        //     ev.target.appendChild(document.getElementById(data))
+        // }
+        window.onload = function () {
+            var drag = document.getElementById("drag");
+            drag.onmousedown = function (e) {
+                var e = e || window.event;
+                var diffX = e.clientX - drag.offsetLeft;
+                var diffY = e.clientY - drag.offsetTop;
+                document.onmousemove = function (e) {
+                    var e = e || window.event;
+                    var left = e.clientX - diffX;
+                    var top = e.clientY - diffY;
+                    drag.style.left = left + 'px';
+                    drag.style.top = top + 'px';
+                }
+                document.onmouseup = function () {
+                    this.onmousemove = null;
+                    this.onmouseup = null;
+                }
+
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- <img id="drag1" draggable='true' src="../static/images/icon.png" ondragstart="drag(event)" width="400px" height="400px"> -->
+    <div id="drag" style="width:200px;height: 200px;border: 1px solid #000;position: absolute"></div>
+
+</body>
+
+</html>
