@@ -5,38 +5,87 @@ let Comment = model.Comment;
 
 module.exports = {
     'GET /':async(ctx,next)=>{
-        var blogs = await Blog.findAll({
-            order:'createdAt DESC',
+        var pageCount,
+            blogsTotal,
+            blogsCount,
+            pageprev,
+            pagenext,
+            hiddenprev='',
+            hiddennext='',
+            queryString = ctx.request.query,
+            pageSize = 10,
+            currentPage;
+        blogsTotal = await Blog.findAll({
+            order: 'createdAt DESC'
         });
-        console.log("len",blogs.length);
-        // var pageSize = blogs.length;
-        // var currentPage = ctx.req.query;
-        // var user = await User.findOne({
-        //     where:{
-        //         email: ctx.request.body.email.trim(),
-        //     }
-        // })
-        // if(!user){
-        //     throw new APIError('login :login_failed', 'Email not exist.');
-        // }
-        // ctx.cookies.set("user",user)
-        //ctx.rest(user);
-        var email = ctx.cookies.get("user");
-        console.log("email",email)
+        blogsCount = blogsTotal.length;
+        console.log("blogsCount",blogsCount);
+        if(queryString.page){
+            currentPage = parseInt(queryString.page);
+        }else{
+            currentPage=1;
+        }
+        
+        if (blogsCount > pageSize) {
+            pageCount = Math.ceil(blogsCount / pageSize);
+        } else {
+            pageCount = 1;
+        }
 
+        var blogs = await Blog.findAll({
+            order: 'createdAt DESC',
+            offset: (currentPage - 1) * pageSize,
+            limit: pageSize
+        });
+
+        var email = ctx.cookies.get("user");
+        console.log("email",email);
+        //当前第一页，只有一页
+        //prev和next都隐藏
+        //当前第二页，只有2页
+        //prev显示，next隐藏
+        //当前最后一页
+        //prev显示，next隐藏
+        console.log("pageCount",pageCount);
+
+        if(pageCount==1){
+            pageprev='';
+            pagenext='';
+            hiddenprev="hiddenprev";
+            hiddennext="hiddennext";
+        }else{
+            pageprev=currentPage-1;
+            pagenext=currentPage+1;
+            if(pageCount==currentPage){
+                hiddennext="hiddennext";
+            }
+            if(currentPage==1){
+                hiddenprev="hiddenprev";
+                pagenext=2;
+            }
+        }
         if(email){
             var user = await User.findOne({
                 where:{
-                    email: email,
+                    email: email
                 }
             });
             ctx.render('blogs.html',{
                 user:user,
-                blogs:blogs
+                blogs:blogs,
+                pageprev:pageprev,
+                pagenext:pagenext,
+                hiddenprev:hiddenprev,
+                hiddennext:hiddennext
             })
         }else{
             ctx.render('blogs.html',{
-                blogs
+                blogs:blogs,
+                pageprev:pageprev,
+                pageprev:pagenext,
+                hiddenprev:hiddenprev,
+                hiddennext:hiddennext
+                
             });
         }
     },
@@ -50,44 +99,16 @@ module.exports = {
         ctx.cookies.set('user', '',{
             expires:new Date(-1)
         });
-        var blogs = await Blog.findAll({
-            order:'createdAt DESC',
-        });
-        console.log("len",blogs.length);
-        // var pageSize = blogs.length;
-        // var currentPage = ctx.req.query;
-        // var user = await User.findOne({
-        //     where:{
-        //         email: ctx.request.body.email.trim(),
-        //     }
-        // })
-        // if(!user){
-        //     throw new APIError('login :login_failed', 'Email not exist.');
-        // }
-        // ctx.cookies.set("user",user)
-        //ctx.rest(user);
-        var email = ctx.cookies.get("user");
-        console.log("email",email)
-
-        if(email){
-            var user = await User.findOne({
-                where:{
-                    email: email,
-                }
-            });
-            ctx.render('blogs.html',{
-                user:user,
-                blogs:blogs
-            })
-        }else{
-            ctx.render('blogs.html',{
-                blogs
-            });
-        }
+        // var blogs = await Blog.findAll({
+        //     order:'createdAt DESC',
+        // });
+        // console.log("len",blogs.length);
+        ctx.redirect('/');
+        
     },
     'GET /blog/:id':async(ctx,next)=>{
         var id = ctx.params.id;
-        console.log(id)
+        var email = ctx.cookies.get("user");
         if(id){
             var blog = await Blog.findOne({
                 where:{
@@ -96,9 +117,9 @@ module.exports = {
             });
             var user = await User.findOne({
                 where:{
-                    id:blog.user_id
+                    email: email,
                 }
-            })
+            });
             ctx.render('blog.html',{
                 blog:blog,
                 user:user

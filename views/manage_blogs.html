@@ -4,20 +4,18 @@
 
 
 <script>
-(function(){
     function showError(resp) {
         resp.json().then(function (result) {
             console.log('Error: ' + result.message);
         });
     }
     window.onload = function(){
-
         var vm = new Vue({
             el: '#vm',
             data: {
                 blogs:'',
                 currentPage:1,
-                pageSize:5,
+                pageSize:20,
                 pageCount:0,
                 loading:true
             },
@@ -35,20 +33,19 @@
                             resp.json().then(function (result) {
                                 that.blogs = result.blogs;
                                 that.pageCount = result.pageCount
-                                console.log(that.blogs);
+                                // console.log(that.blogs);
                             });
                         }, showError);
                 },
                 editBlog:function(blog){
+
                     location.assign('/manage/blogs/edit?id=' + blog.id);
                 },
                 deleteBlog: function (blog) {
                     var that = this;
                     if (confirm('确认要删除' + blog.name + '？删除后不可恢复！')) {
                         that.$resource('/api/blogs/'+blog.id+'/delete').delete().then(function (resp) {
-                            resp.json().then(function (result) {
-                                that.init();
-                            });
+                            that.init();
                         }, showError);
                     }
                 },
@@ -59,40 +56,28 @@
             }
         });
     }
-})()
 </script>
 
 {%  endblock %}
 {% block content %}
 
-    <div class="uk-width-1-1 uk-margin-bottom">
-        <div class="uk-panel uk-panel-box">
-            <ul class="uk-breadcrumb">
-                <li class="uk-active"><span>博客</span></li>
-            </ul>
-        </div>
-    </div>
 
-    <div id="error" class="uk-width-1-1">
-    </div>
-
-
-    <div id="vm" class="uk-width-1-1">
+    <div id="vm" class="manage-content">
         {% if user %}
-            <a href="/manage/blogs/create" class="uk-button uk-button-primary"><i class="uk-icon-plus"></i> 新博客</a>
+            <a href="/manage/blogs/create" class="create"><i class="fa fa-plus"></i> 新博客</a>
         {% else %}
 
         {% endif %}
         <div v-if="loading" class="uk-width-1-1 uk-text-center">
             <span><i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> 正在加载...</span>
         </div>
-        <table class="uk-table uk-table-hover">
+        <table class="manage-table">
             <thead>
                 <tr>
-                    <th class="uk-width-5-10">标题 / 摘要</th>
-                    <th class="uk-width-2-10">作者</th>
-                    <th class="uk-width-2-10">创建时间</th>
-                    <th class="uk-width-1-10">操作</th>
+                    <th class="tr-1">标题 / 摘要</th>
+                    <th class="tr-1">作者</th>
+                    <th class="tr-1">创建时间</th>
+                    <th class="tr-2">操作</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,8 +92,8 @@
                         <span v-text="blog.createdAt.toDateTimeString()"></span>
                     </td>
                     <td>
-                        <a href="#0" v-on:click="editBlog(blog)"><i class="uk-icon-edit"></i></a> 
-                        <a href="#0" v-on:click="deleteBlog(blog)"><i class="uk-icon-trash-o"></i></a>
+                        <a href="" v-on:click.prevent="editBlog(blog)"><i class="fa fa-edit"></i></a> 
+                        <a href="" v-on:click.prevent="deleteBlog(blog)"><i class="fa fa-trash-o"></i></a>
                     </td>
                 </tr>
             </tbody>

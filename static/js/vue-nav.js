@@ -1,12 +1,12 @@
 (function () {
-	var tm = '<ul class="uk-pagination">' +
-		'<li v-if="cur==1" class="uk-disabled"><span><i class="uk-icon-angle-double-left"></i></span></li>' +
-		'<li v-if="cur!=1"><a @click="btnClick(cur-1)"><i class="uk-icon-angle-double-left"></i></a></li>' +
-		'<li v-for="index in indexs" v-bind:class="{ \'uk-active\': cur == index}">' +
+	var tm = '<ul class="pagination">' +
+		'<li v-if="cur==1" class="disabled"><span><i class="fa fa-angle-double-left"></i></span></li>' +
+		'<li v-if="cur!=1"><a @click="btnClick(cur-1)"><i class="fa fa-angle-double-left"></i></a></li>' +
+		'<li v-for="index in indexs" v-bind:class="{ \'active\': cur == index}">' +
 		'<span v-on:click="btnClick(index)">{{ index }}</span>' +
 		'</li>' +
-		'<li v-if="cur==all" class="uk-disabled"><span><i class="uk-icon-angle-double-right"></i></span></li>' +
-		'<li v-if="cur!=all"><a @click="btnClick(cur+1)"><i class="uk-icon-angle-double-right"></i></a></li>' +
+		'<li v-if="cur==all" class="disabled"><span><i class="fa fa-angle-double-right"></i></span></li>' +
+		'<li v-if="cur!=all"><a @click="btnClick(cur+1)"><i class="fa fa-angle-double-right"></i></a></li>' +
 		'</ul>'
 	var navBar = Vue.extend({
 		template: tm,

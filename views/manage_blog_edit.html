@@ -1,7 +1,6 @@
 {% extends '__base__.html' %} {% block title %}编辑博客{% endblock %} {% block beforehead %}
 
 <script>
-    (function () {
         var ID = location.search.substring(4),
             action = '/api/blogs/' + ID;
         console.log(ID);
@@ -11,6 +10,7 @@
             });
         }
         window.onload = function () {
+           
             var vm = new Vue({
                 el: '#vm',
                 data: {
@@ -19,15 +19,33 @@
                         summary: '',
                         content: ''
                     },
-                    loading: true
+                    loading: true,
+                    editor: null,
+                    editor1: null
                 },
                 created: function () {
                     if (ID) {
                         this.init();
                     }
                     this.loading = false;
+
+                },
+                mounted() {
+                    var E = window.wangEditor;
+                    this.editor = new E('#editor');
+                    this.editor.customConfig.uploadImgServer = '/upload'
+                    this.editor.create();
+
+                    this.editor1 = new E('#editor1')
+                    this.editor1.create();
+                    
+
                 },
                 methods: {
+                    getContent: function () {
+                        this.blog.content = this.editor.txt.html();
+                        this.blog.summary = this.editor1.txt.html();
+                    },
                     init: function () {
                         var that = this;
                         that.$resource('/api/blogs/' + ID).get().then(function (resp) {
@@ -35,7 +53,8 @@
                                 that.blog.name = result.name;
                                 that.blog.content = result.content;
                                 that.blog.summary = result.summary;
-                                console.log(result);
+                                that.editor1.txt.html(result.summary)
+                                that.editor.txt.html(result.content)
                             });
                         }, showError);
                     },
@@ -43,70 +62,54 @@
                         var that = this;
                         that.$resource('/api/blogs').save(that.blog).then(function (resp) {
                             resp.json().then(function (result) {
-                                console.log(resp);
+                                // console.log(resp);
                             });
                         }, showError);
                     },
                     updateBlog: function () {
                         var that = this;
                         that.$resource(action).update(that.blog).then(function (resp) {
-                            console.log(`Update ${resp}`);
+                            // console.log(`Update ${resp}`);
                         }, showError);
                     },
                     saveBlog: function () {
                         var that = this;
+                        this.getContent();
                         ID ? that.updateBlog() : that.createBlog();
                     },
                     submit: function (event) {
                         event.preventDefault();
-                        var that = this;
-                        that.saveBlog();
+                        this.saveBlog();
                         return location.assign('/manage/blogs');
-                       
+
                     }
                 }
             });
         }
-    })()
 </script> {% endblock %} {% block content %}
 
-<div class="uk-width-1-1 uk-margin-bottom">
-    <div class="uk-panel uk-panel-box">
-        <a href="/manage/blogs">博客</a>
-    </div>
-</div>
-<div id="vm" class="uk-width-2-3">
-    <div v-if="loading" class="uk-width-1-1 uk-text-center">
-        <span>
-            <i class="uk-icon-spinner uk-icon-medium uk-icon-spin"></i> 正在加载...</span>
-    </div>
-    <form v-on:submit="submit" class="uk-form uk-form-stacked">
-        <div class="uk-alert uk-alert-danger uk-hidden"></div>
-        <div class="uk-form-row">
-            <label class="uk-form-label">标题:</label>
-            <div class="uk-form-controls">
-                <input v-model="blog.name" name="name" type="text" placeholder="标题" class="uk-width-1-1">
-            </div>
-        </div>
-        <div class="uk-form-row">
-            <label class="uk-form-label">摘要:</label>
-            <div class="uk-form-controls">
-                <textarea v-model="blog.summary" rows="4" name="summary" placeholder="摘要" class="uk-width-1-1" style="resize:none;"></textarea>
-            </div>
-        </div>
-        <div class="uk-form-row">
-            <label class="uk-form-label">内容:</label>
-            <div class="uk-form-controls">
-                <textarea v-model="blog.content" rows="16" name="content" placeholder="内容" class="uk-width-1-1" style="resize:none;"></textarea>
-            </div>
-        </div>
-        <div class="uk-form-row">
-            <button type="submit" class="uk-button uk-button-primary">
-                <i class="uk-icon-save"></i> 保存</button>
-            <a href="/manage/blogs" class="uk-button">
-                <i class="uk-icon-times"></i> 取消</a>
-        </div>
-    </form>
-</div>
 
+<div id="vm">
+    
+    <div class="row">
+        <h3 class="label">标题:</h3>
+        <input v-model="blog.name" name="name" type="text" class="headline" autocomplete="off">
+    </div>
+    <div class="row">
+        <h3 class="label">摘要:</h3>
+    </div>
+    <div id="editor1">
+    </div>
+    <h3 class="label">内容:</h3>
+
+    <div id="editor">
+
+    </div>
+    <div class="btns">
+        <a @click="submit" href="/manage/blogs" class="button">
+            <i class="fa fa-save"></i> 保存</a>
+        <a href="/manage/blogs" class="button">
+                <i class="fa fa-times"></i> 取消</a>
+    </div>
+</div>
 {% endblock %}

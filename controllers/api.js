@@ -3,7 +3,7 @@ const APIError = require('../rest').APIError;
 let Blog = model.Blog;
 let User = model.User;
 let Comment = model.Comment;
-
+const crypto = require("crypto")
 module.exports = {
     'GET /api/blogs': async (ctx, next) => {
         var pageCount,
@@ -52,10 +52,13 @@ module.exports = {
         if (users) {
             throw new APIError('register :register_failed', 'email is already in use.');
         }
+        var md5 = crypto.createHash("md5");
+        var newPwd = md5.update(r.passwd.trim()).digest("hex");
         var user = await User.create({
             name: r.name.trim(),
             email: r.email.trim(),
-            passwd: r.passwd.trim(),
+            image:'http://www.gravatar.com/avatar/%s?d=mm&s=120',
+            passwd: newPwd,
         })
 
         await user.save();
@@ -72,15 +75,16 @@ module.exports = {
         if (!r.passwd || !r.passwd.trim()) {
             throw new APIError('passwd :passwd_error', 'passwd is illegal.');
         }
+        var md5 = crypto.createHash('md5');
+        var newPwd = md5.update(r.passwd.trim()).digest("hex");
         var user = await User.findOne({
             where: {
                 email: r.email.trim(),
-                passwd: r.passwd
+                passwd: newPwd
             }
         })
         if (user) {
             ctx.cookies.set('user', user.email);
-            console.log("user cookie:", user)
             ctx.rest(user);
         }
     },
@@ -119,7 +123,7 @@ module.exports = {
         var r = ctx.request.body;
         var u;
         var email = ctx.cookies.get("user");
-        console.log("email",email)
+        console.log("email",email);
         if (email) {
             u = await User.findOne({
                 email: email,
@@ -139,17 +143,13 @@ module.exports = {
     },
     
     'DELETE /api/blogs/:id/delete': async (ctx, next) => {
-        var blog = await Blog.findAll({
-            where: {
-                id: ctx.params.id
-            }
+        var id = ctx.params.id;
+        await Blog.destroy({
+            'where': {id }
         });
-      
-        await blog.destroy({
-            force: true
+       
+        ctx.rest({
+            
         });
-        ctx.rest(blog);
-        
-
     }
 }

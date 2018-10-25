@@ -11,8 +11,8 @@
                 console.log('Error: ' + result.message);
             });
         }
-        $(document).ready(function(){
- var vm = new Vue({
+        window.onload = function(){
+            var vm = new Vue({
                 el: '#vm',
                 data: {
                     name: '',
@@ -44,8 +44,7 @@
                     }
                 }
             });
-        })
-           
+        }
         
 </script> {% endblock %} {% block content %}
 

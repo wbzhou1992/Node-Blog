@@ -36,10 +36,38 @@ function addControllers(router,dir){
 
 }
 
+function addUploadFile(router) {
+	//文件上传
+	const multer = require('koa-multer');
+	//配置
+	var storage = multer.diskStorage({
+		//文件保存路径
+		destination:function (req,file,cb) {
+			cb(null,'./static/public/uploads/img/')
+		},
+		filename:function (req,file,cb){
+			var fileFormat = (file.originalname).split(".");
+			cb(null,Date.now() + "." + fileFormat[fileFormat.length - 1]);
+		}
+	})
+	var upload = multer({storage:storage});
+	//upload.single('file')这里面的file是上传空间的name<input type="file" name="file"/>  
+	router.post('/upload',upload.any(),async (ctx,next) => {
+        // ctx.response.body ="<h1>上传成功！</h1>";
+        console.log(ctx.req.files[0].path);
+		ctx.body = {
+                "errno":0, 
+	    		"data":[
+                    "/"+ctx.req.files[0].path
+                ]
+	  	} 
+	})
+	console.log(`register URL mapping: POST /upload`);
+}
 module.exports = function(dir){
     let router = require('koa-router')(),
         controller_dir = dir||'controllers';
     addControllers(router,controller_dir);
+    addUploadFile(router);
     return router.routes();
-    
 };
