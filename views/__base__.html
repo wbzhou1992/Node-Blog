@@ -26,7 +26,7 @@
         <div class="wrap">
             <div class="logo">
                 <a href="/">
-                    <img src="/static/images/logo.svg">
+                    <img src="/static/images/logo.png">
 
                 </a>
                 <span>WBZHOU的博客</span>
@@ -62,17 +62,17 @@
                         <span>友链</span>
                     </a>
                 </li>
+                {% if user %}
+                {% else %}
                 <li>
-                    <a href="" title="图书">
-                        <i class="fa fa-book"></i>
-                        <span>图书</span>
+                    <a href="/signin" title="图书">
+                        <i class="fa fa-sign-in"></i>
+                        <span>登录</span>
                     </a>
                 </li>
-               
+                {% endif %}              
             </ul>
-            <ul>
-                <li></li>
-            </ul>
+            
         </div>
     </nav>
 

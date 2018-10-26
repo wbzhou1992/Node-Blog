@@ -209,7 +209,7 @@ a:hover{
 
 .create{
   line-height: 28px;
-  display: block;
+  display: inline-block;
   color: #fff;
   width: 100px;
   text-align: center;
@@ -219,6 +219,7 @@ a:hover{
   background-image: linear-gradient(to bottom,#00b4f5,#008dc5);
   color: #fff;
   margin-left: 40px;
+  
 }
 .manage-content a{
   color: #fff;
@@ -228,6 +229,7 @@ a:hover{
 }
 .manage-table{
   margin: 20px;
+  width: 100%;
 }
 .manage-table a{
   color: #2479CC;
@@ -242,12 +244,17 @@ tr{
 }
 th{
   border-bottom: 1px solid #e5e5e5;
-  width: 2%;
 }
 td{
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 
+}
+.tr-1{
+  widows: 40%;
+}
+.tr-4{
+  width: 14%;
 }
 .pagination{
   text-align: center;
@@ -336,4 +343,109 @@ blockquote{
   margin: 40px;
   text-align: center;
   border-top: 1px solid #fff
+}
+article pre{
+  font-family: "Consolas","Liberation Mono",Courier,monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #5d6a6a;
+    border-left: 5px solid #ccc;
+    word-break: break-all;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    position: relative;
+    overflow: hidden
+}
+.form-container{
+  height:700px;
+  position: relative;
+}
+.form{
+  height: 300px;
+  position: absolute;
+  right: 100px;
+  top: 200px;
+  width: 340px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+ 
+}
+.form-row{
+  line-height: 50px;
+  text-align: center;
+}
+.tooltip{
+  line-height: 60px;
+  border-bottom: 1px solid #999;
+  padding-left:20px; 
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 20px;
+}
+.signin{
+  background: url(../images/back.jpg) no-repeat center top;
+}
+.form input{
+  line-height: 34px;
+  width: 78%;
+  outline: none;
+  border: 1px solid #ccc;
+  border-radius: 0 5px 5px 0;
+  padding: 0 4px;
+
+}
+.email,.passwd{
+  margin: 0 20px;
+}
+
+.login{
+  line-height: 40px;
+  width: 100%;
+  display: inline-block;
+  text-align: center;
+  margin: 20px auto;
+}
+.login button{
+  width: 80%;
+  height: 36px;
+  background: #2589f3;
+  color: #fff;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
+
+
+}
+.form-row i{
+  border: 1px solid #ddd;
+  background: #eee;
+  display: inline-block;
+  line-height: 34px;
+  vertical-align: middle;
+  position: relative;
+  left: 5px;
+  width: 30px;
+  border-radius: 5px 0 0 5px;
+  border-right: none;
+  text-align: center;
+}
+.user{
+  display: inline-block;
+  float: right;
+  width: 160px;
+  margin-bottom: 10px;
+}
+.user li{
+  float: left;
+  width:80px;
+}
+.user li a{
+  color: #000;
+}
+.user li a:hover{
+  color: #000;
+}
+.user .logout{
+  float: right;
 }
