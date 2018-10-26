@@ -62,7 +62,13 @@ module.exports = {
         })
 
         await user.save();
-        ctx.cookies.set('user', user.email);
+        var d = new Date();
+        d.setTime(d.getTime()+2*60*60*1000)
+        ctx.cookies.set('user', user.email,{
+            httpOnly:false,
+            overwrite:false,
+            expires:d
+        });
         console.log("user cookie:", user)
         ctx.rest(user);
     },
@@ -84,7 +90,13 @@ module.exports = {
             }
         })
         if (user) {
-            ctx.cookies.set('user', user.email);
+            var d = new Date();
+            d.setTime(d.getTime()+2*60*60*1000)
+            ctx.cookies.set('user', user.email,{
+                httpOnly:false,
+                overwrite:false,
+                expires:d
+            });
             ctx.rest(user);
         }
     },
