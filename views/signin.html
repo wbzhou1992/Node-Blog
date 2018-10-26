@@ -15,6 +15,10 @@
                 console.log('Error: ' + result.message);
             });
         }
+        function validateEmail(email) {
+            var re = /^[a-z0-9\.\-\_]+\@[a-z0-9\-\_]+(\.[a-z0-9\-\_]+){1,4}$/;
+            return re.test(email.toLowerCase());
+        }
         window.onload = function(){
             var vmAuth = new Vue({
                 el: '#vm',
@@ -25,13 +29,15 @@
                 methods: {
                     login: function (event) {
                         event.preventDefault();
-                        var that = this;
-                        var email = this.email.trim().toLowerCase(),
-                            data = {
-                                email: email,
+                        var email = this.email.trim().toLowerCase()
+                        if(this.email.trim()==""||this.passwd.trim()==""||(!validateEmail(email))){
+                            return;
+                        }
+                        var data = {
+                                email: this.email,
                                 passwd: this.passwd
                             };
-                        that.$resource('/api/authenticate').save(data).then(function (resp) {
+                        this.$resource('/api/authenticate').save(data).then(function (resp) {
                             resp.json().then(function (result) {
                                 console.log("result", result);
                                 location.assign('/')

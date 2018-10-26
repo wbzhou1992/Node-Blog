@@ -79,6 +79,9 @@
                     },
                     submit: function (event) {
                         event.preventDefault();
+                        if(this.blog.summary.trim()==""||this.blog.content.trim()==""||this.blog.name.trim()==""){
+                            return;
+                        }
                         this.saveBlog();
                         return location.assign('/manage/blogs');
 

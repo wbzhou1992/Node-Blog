@@ -11,6 +11,7 @@
                 console.log('Error: ' + result.message);
             });
         }
+       
         window.onload = function(){
             var vm = new Vue({
                 el: '#vm',
@@ -22,14 +23,23 @@
                 },
                 methods: {
                     saveUser:function(){
-                        var that = this;
-                        var email = that.email.trim().toLowerCase();
-                        var user = {
-                            name:that.name.trim(),
-                            email:that.email.trim(),
-                            passwd:that.password1.trim(),
+                        var email = this.email.trim().toLowerCase();
+                        if(validateEmail(emial)){
+                            return;
                         }
-                        that.$resource('/api/users').save(user).then(function (resp) {
+                        if(this.name.trim()==""||this.email.trim()==""||this.password1.trim()==""||this.password2.trim()==""){
+                            return;
+                        }
+                        if(this.password1.trim()!==this.password2.trim()){
+                            return;
+                        }
+                        var user = {
+                            name:this.name.trim(),
+                            email:this.email.trim(),
+                            passwd:this.password1.trim(),
+                        }
+                       
+                        this.$resource('/api/users').save(user).then(function (resp) {
                             resp.json().then(function (result) {
                                 console.log("result",result);
                                 location.assign('/')

@@ -122,14 +122,18 @@ module.exports = {
     'POST /api/blogs': async (ctx, next) => {
         var r = ctx.request.body;
         var u;
-        var email = ctx.cookies.get("user");
-        console.log("email",email);
+        var name = r.name.trim();
+        var summary = r.summary.trim();
+        var content = r.conten.trim();
         if (email) {
             u = await User.findOne({
                 email: email,
             })
-          
         }
+        if(name==""||summary==""||content==""){
+            return;
+        }
+        var email = ctx.cookies.get("user");        
         var blogs = await Blog.create({
             user_id: u.id,
             user_name: u.name,
