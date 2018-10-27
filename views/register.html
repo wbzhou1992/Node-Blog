@@ -24,7 +24,7 @@
                 methods: {
                     saveUser:function(){
                         var email = this.email.trim().toLowerCase();
-                        if(validateEmail(emial)){
+                        if(!validateEmail(email)){
                             return;
                         }
                         if(this.name.trim()==""||this.email.trim()==""||this.password1.trim()==""||this.password2.trim()==""){
@@ -48,8 +48,7 @@
                     },
                     register: function (event) {
                         event.preventDefault();
-                        var that = this;
-                        that.saveUser();
+                        this.saveUser();
 
                     }
                 }

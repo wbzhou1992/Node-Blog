@@ -98,6 +98,8 @@ module.exports = {
                 expires:d
             });
             ctx.rest(user);
+        }else{
+            throw new APIError('error', 'email or password is wrong.');
         }
     },
     //更新获取
@@ -136,16 +138,18 @@ module.exports = {
         var u;
         var name = r.name.trim();
         var summary = r.summary.trim();
-        var content = r.conten.trim();
+        var content = r.content.trim();
+        if(name==""||summary==""||content==""){
+            return;
+        }
+        var email = ctx.cookies.get("user");        
+
         if (email) {
             u = await User.findOne({
                 email: email,
             })
         }
-        if(name==""||summary==""||content==""){
-            return;
-        }
-        var email = ctx.cookies.get("user");        
+        
         var blogs = await Blog.create({
             user_id: u.id,
             user_name: u.name,

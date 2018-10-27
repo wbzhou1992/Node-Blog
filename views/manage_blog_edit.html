@@ -48,7 +48,7 @@
                     },
                     init: function () {
                         var that = this;
-                        that.$resource('/api/blogs/' + ID).get().then(function (resp) {
+                        this.$resource('/api/blogs/' + ID).get().then(function (resp) {
                             resp.json().then(function (result) {
                                 that.blog.name = result.name;
                                 that.blog.content = result.content;
@@ -59,29 +59,26 @@
                         }, showError);
                     },
                     createBlog: function () {
-                        var that = this;
-                        that.$resource('/api/blogs').save(that.blog).then(function (resp) {
+                        this.$resource('/api/blogs').save(this.blog).then(function (resp) {
                             resp.json().then(function (result) {
-                                // console.log(resp);
+                                console.log(resp);
                             });
                         }, showError);
                     },
                     updateBlog: function () {
-                        var that = this;
-                        that.$resource(action).update(that.blog).then(function (resp) {
+                        this.$resource(action).update(this.blog).then(function (resp) {
                             // console.log(`Update ${resp}`);
                         }, showError);
                     },
                     saveBlog: function () {
-                        var that = this;
                         this.getContent();
-                        ID ? that.updateBlog() : that.createBlog();
-                    },
-                    submit: function (event) {
-                        event.preventDefault();
                         if(this.blog.summary.trim()==""||this.blog.content.trim()==""||this.blog.name.trim()==""){
                             return;
                         }
+                        ID ? this.updateBlog() : this.createBlog();
+                    },
+                    submit: function (event) {
+                        event.preventDefault();
                         this.saveBlog();
                         return location.assign('/manage/blogs');
 
