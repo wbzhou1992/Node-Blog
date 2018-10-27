@@ -39,7 +39,7 @@ module.exports = {
         });
 
         var email = ctx.cookies.get("user");
-        console.log("email",email);
+        console.log("currentPage",currentPage);
         //当前第一页，只有一页
         //prev和next都隐藏
         //当前第二页，只有2页
@@ -82,7 +82,7 @@ module.exports = {
             ctx.render('blogs.html',{
                 blogs:blogs,
                 pageprev:pageprev,
-                pageprev:pagenext,
+                pagenext:pagenext,
                 hiddenprev:hiddenprev,
                 hiddennext:hiddennext
                 
