@@ -67,7 +67,7 @@
                     },
                     updateBlog: function () {
                         this.$resource(action).update(this.blog).then(function (resp) {
-                            // console.log(`Update ${resp}`);
+                            console.log(`Update ${resp}`);
                         }, showError);
                     },
                     saveBlog: function () {

@@ -57,7 +57,7 @@ module.exports = {
         var user = await User.create({
             name: r.name.trim(),
             email: r.email.trim(),
-            image:'http://www.gravatar.com/avatar/%s?d=mm&s=120',
+            image:'http://www.gravatar.com/avatar/?d=mm&s=120',
             passwd: newPwd,
         })
 
@@ -143,7 +143,7 @@ module.exports = {
             return;
         }
         var email = ctx.cookies.get("user");        
-
+        
         if (email) {
             u = await User.findOne({
                 email: email,
@@ -160,6 +160,33 @@ module.exports = {
         })
         await blogs.save();
         ctx.rest(blogs);
+    },
+    //新建blog
+    'POST /api/comments': async (ctx, next) => {
+        var r = ctx.request.body;
+        var u;
+        var blogId = r.id;
+        var content = r.content.trim();
+        if(!blogId||content==""){
+            return;
+        }
+        var email = ctx.cookies.get("user");        
+
+        if (email) {
+            u = await User.findOne({
+                email: email,
+            })
+        }
+        
+        var comments = await Comment.create({
+            blog_id:blogId,
+            user_id: u.id,
+            user_name: u.name,
+            user_image: u.image,
+            content: r.content.trim()
+        })
+        await comments.save();
+        ctx.rest(comments);
     },
     
     'DELETE /api/blogs/:id/delete': async (ctx, next) => {

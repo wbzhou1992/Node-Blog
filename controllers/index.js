@@ -120,9 +120,15 @@ module.exports = {
                     email: email,
                 }
             });
+            var comments = await Comment.findAll({
+                where:{
+                    blog_id: id,
+                }
+            });
             ctx.render('blog.html',{
                 blog:blog,
-                user:user
+                user:user,
+                comments:comments
             });
         }
     },

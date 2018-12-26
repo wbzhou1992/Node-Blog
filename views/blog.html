@@ -3,7 +3,40 @@
 {% block title %}{{ blog.name }}{% endblock %}
 
 {% block beforehead %}
+<script>
+     function showError(resp) {
+        resp.json().then(function (result) {
+            console.log('Error: ' + result.message);
+        });
+    }
+window.onload = function(){
+    var ID = location.href.substring(location.href.indexOf('blog')+5);
+    new Vue({
+        el:'#comment',
+        data:{
+            comment:{
+                content:'',
+                id:ID
+            }
+        },
+        methods:{
+            submit:function(){
+                if(this.content.trim().length!=0){
+                    this.$resource('/api/comments').save(this.comment).then(function (resp) {
+                    
+                    console.log(resp);
+                
+                    }, showError);
+                }else{
+                    return;
+                }
+                
+            }
+        }
+    })
+}
 
+</script>
 {% endblock %}
 
 {% block content %}
@@ -14,4 +47,24 @@
             {{ blog.content | safe }}
             
         </article>
+        <div class="divider">
+                <span class="d-left">评论</span>
+            </div>
+        <article id="comment">
+                <div class="comment-wrap">
+                        <textarea v-model="comment.content"></textarea>
+                </div>
+                <button class="btn" type="button" @click.prevent="submit">提交</button>
+            </article>
+           
+        {% for comment in comments %}
+        <article class="comment-display">
+            <p class="user-commnet"><img src="{{comment.user_image}}"> 
+                <span class="comment-meta">{{ comment.createdAt | date_filter }}</span></p>
+           
+            {{ comment.content | safe }}
+            
+        </article>
+        {% endfor %}
+        
 {% endblock %}
